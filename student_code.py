@@ -131,6 +131,58 @@ class KnowledgeBase(object):
         # Not required for the extra credit assignment
 
     def kb_explain(self, fact_or_rule):
+        returnString = ''
+        if fact_or_rule.name == 'fact':
+            if (fact_or_rule not in self.facts):
+                return "Fact is not in the KB"
+            foundFactIndex = self.facts.index(fact_or_rule)#now find the fact
+            foundFact = self.facts[foundFactIndex]
+            returnString += 'fact: (' + foundFact.statement.predicate
+            # "fact: (predicate"
+            for term in foundFact.statement.terms:
+                returnString += " " + str(term)
+            returnString += ')'
+            #fact: (pred term term)
+            if foundFact.asserted == True:
+                returnString += ' ASSERTED'
+            #now check for supports
+
+            if foundFact.supported_by != []:
+                for supportArray in foundFact.supported_by:
+                    returnString = returnString + '\n  ' + 'SUPPORTED BY'
+                    for item in supportArray:
+                        returnString += '\n    ' + self.kb_explain(item)
+            print(returnString)
+            return returnString
+
+        elif fact_or_rule.name == 'rule':
+            if (fact_or_rule not in self.rules):
+                return "Rule is not in the KB"
+            foundRuleIndex = self.rules.index(fact_or_rule)  # now find the fact
+            foundRule = self.rules[foundRuleIndex]
+            returnString += 'rule: ('
+            # "rule: (predicate"
+            for obj in foundRule.lhs:
+                returnString += '(' + obj.predicate
+                for term in obj.terms:
+                    returnString += ' ' + str(term)
+                returnString += ')'
+            returnString = returnString[:-2] + ') -> (' + foundRule.rhs.predicate
+            for term in foundRule.rhs.terms:
+                returnString += ' ' + str(term)
+            returnString += ')'
+            if foundRule.asserted == True:
+                returnString += ' ASSERTED'
+            if foundRule.supported_by != []:
+                for supportArray in foundRule.supported_by:
+                    returnString = returnString + '\n  ' + 'SUPPORTED BY'
+                    for item in supportArray:
+                        returnString += '\n    ' + self.kb_explain(item)
+            print(returnString)
+            return returnString
+        else:
+            return False
+
         """
         Explain where the fact or rule comes from
 
@@ -140,8 +192,16 @@ class KnowledgeBase(object):
         Returns:
             string explaining hierarchical support from other Facts and rules
         """
+
+
         ####################################################
         # Student code goes here
+
+
+        #If the Fact queried is not in the KB,
+        #kb_explain should return "Fact is not in the KB"; for a missing Rule,
+        #it should return "Rule is not in the KB".
+        # Any input other than Fact or Rule instances should lead to returning False.
 
 
 class InferenceEngine(object):
@@ -154,7 +214,7 @@ class InferenceEngine(object):
             kb (KnowledgeBase) - A KnowledgeBase
 
         Returns:
-            Nothing            
+            Nothing
         """
         printv('Attempting to infer from {!r} and {!r} => {!r}', 1, verbose,
             [fact.statement, rule.lhs, rule.rhs])
