@@ -166,8 +166,8 @@ class KnowledgeBase(object):
                 returnString += '(' + obj.predicate
                 for term in obj.terms:
                     returnString += ' ' + str(term)
-                returnString += ')'
-            returnString = returnString + ') -> (' + foundRule.rhs.predicate
+                returnString += '), '
+            returnString = returnString[:-2] + ') -> (' + foundRule.rhs.predicate
             for term in foundRule.rhs.terms:
                 returnString += ' ' + str(term)
             returnString += ')'
@@ -204,7 +204,7 @@ class KnowledgeBase(object):
                 for supportArray in foundFact.supported_by:
                     returnString = returnString + '\n  ' + padding + 'SUPPORTED BY'
                     for item in supportArray:
-                        returnString += '\n    ' + self.kb_explain_helper(item, padding)
+                        returnString += '\n    ' + padding + self.kb_explain_helper(item, padding)
             return returnString
 
         elif fact_or_rule.name == 'rule':
@@ -218,8 +218,8 @@ class KnowledgeBase(object):
                 returnString += '(' + obj.predicate
                 for term in obj.terms:
                     returnString += ' ' + str(term)
-                returnString += ')'
-            returnString = returnString + ') -> (' + foundRule.rhs.predicate
+                returnString += '), '
+            returnString = returnString[:-2] + ') -> (' + foundRule.rhs.predicate
             for term in foundRule.rhs.terms:
                 returnString += ' ' + str(term)
             returnString += ')'
@@ -229,7 +229,7 @@ class KnowledgeBase(object):
                 for supportArray in foundRule.supported_by:
                     returnString = returnString + '\n  ' + padding + 'SUPPORTED BY'
                     for item in supportArray:
-                        returnString += '\n    ' + self.kb_explain_helper(item, padding)
+                        returnString += '\n    ' + padding + self.kb_explain_helper(item, padding)
             return returnString
         else:
             return False
