@@ -132,7 +132,7 @@ class KnowledgeBase(object):
 
     def kb_explain(self, fact_or_rule):
         returnString = ''
-        padding = '  '
+        padding = ''
         if fact_or_rule.name == 'fact':
             if (fact_or_rule not in self.facts):
                 return "Fact is not in the KB"
@@ -202,6 +202,7 @@ class KnowledgeBase(object):
 
             if foundFact.supported_by != []:
                 for supportArray in foundFact.supported_by:
+                    padding = padding + '  '
                     returnString = returnString + '\n  ' + padding + 'SUPPORTED BY'
                     for item in supportArray:
                         returnString += '\n    ' + padding + self.kb_explain_helper(item, padding)
@@ -227,6 +228,7 @@ class KnowledgeBase(object):
                 returnString += ' ASSERTED'
             if foundRule.supported_by != []:
                 for supportArray in foundRule.supported_by:
+                    padding = padding + '  '
                     returnString = returnString + '\n  ' + padding + 'SUPPORTED BY'
                     for item in supportArray:
                         returnString += '\n    ' + padding + self.kb_explain_helper(item, padding)
